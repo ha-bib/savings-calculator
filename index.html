@@ -758,7 +758,7 @@
                         <td class="amount-format" style="color: #4CAF50; font-weight: 600;">+${formatRupiah(monthlySaving)}</td>
                         <td class="amount-format">${formatRupiah(balanceAfterSaving)}</td>
                         <td style="color: #4CAF50; font-weight: 600;">${targetAchieved || '-'}</td>
-                        <td class="amount-format"><strong>${achievedTargets.length > 0 ?mformatRupiah(currentBalance) : '-'}</strong></td>
+                        <td class="amount-format"><strong>${achievedTargets.length > 0 ? formatRupiah(currentBalance) : '-'}</strong></td>
                     </tr>
                 `;
                 tbody.append(row);
