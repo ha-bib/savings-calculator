@@ -2,8 +2,7 @@
 <html lang="id">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" /> 
   <title>Kalkulator Target Tabungan</title>
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'><text y='60' font-size='60'>💵</text></svg>" />
@@ -159,8 +158,7 @@
     .drag-handle {
       color: #999;
       font-size: 1.2rem;
-      cursor: move;
-      padding: 5px;
+      cursor: move; 
     }
 
     .target-inputs {
@@ -205,20 +203,21 @@
     }
 
     .sortable-placeholder {
-      height: 130px;
+      height: 95px;
       background: linear-gradient(45deg, #e3f2fd, #bbdefb);
       border: 2px dashed #2196f3;
-      border-radius: 15px;
+      border-radius: 25px;
       margin-bottom: 15px;
     }
 
     .priority-badge {
       background: #4caf50;
       color: white;
-      padding: 4px 8px;
+      padding: 6px 8px 4px 8px;
       border-radius: 15px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.9rem;
+      font-weight: 900;
+      height: -webkit-fill-available;
     }
 
     .amount-format {
@@ -236,55 +235,95 @@
     .target-header {
       width: 100%;
       display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
+      justify-content: space-between; 
     }
 
-    /* Mobile-friendly tweaks */
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-
+   /* Mobile-friendly tweaks */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
   
-      .content {
-        grid: 10px;
-      }
+  .target-item {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-      .section-wrap {
-        padding: 15px;
-      }
+  .content {
+    grid: 10px;
+  }
 
-      .target-inputs {
-        flex-direction: column;
-      }
+  .section-wrap {
+    padding: 15px;
+  }
 
-      .form-group {
-        margin-bottom: 15px;
-      }
+  .target-inputs {
+    flex-direction: column;
+  }
 
-      .header h1 {
-        font-size: 1.6rem;
-      }
+  .form-group {
+    margin-bottom: 15px;
+  }
 
-      table {
-        min-width: 500px;
-      }
+  .header h1 {
+    font-size: 1.6rem;
+  }
 
-      .target-inputs {
-        flex-direction: column;
-        gap: 10px;
-      }
+  table {
+    min-width: 500px;
+  }
 
-      .target-inputs .form-group,
-      .target-inputs button {
-        width: 100% !important;
-      }
+  .target-inputs {
+    flex-direction: column;
+    gap: 10px;
+  }
 
-      .btn {
-        width: 100%;
-      }
-    }
+  .target-inputs .form-group,
+  .target-inputs button {
+    width: 100% !important;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  /* Mobile vertical card layout */
+  .target-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .target-header > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    order: 1;
+  }
+
+  .target-header > div:last-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    order: 2;
+    padding-top: 10px;
+    border-top: 1px solid #e1e5e9;
+  }
+
+  .target-name {
+    font-size: 1.1rem;
+  }
+
+  .target-amount {
+    font-size: 1rem;
+  }
+
+  .drag-handle {
+    font-size: 1rem;
+  }
+}
   </style>
 </head>
 
@@ -699,148 +738,135 @@
     }
 
     function renderMonthlyTimeline(monthlySaving, targetsParam) {
-      const tbody = $("#monthly-timeline-body");
-      tbody.empty();
+  const tbody = $("#monthly-timeline-body");
+  tbody.empty();
 
-      let currentBalance = 0;
-      let currentDate = new Date();
-      let currentYear = currentDate.getFullYear();
-      let currentMonth = currentDate.getMonth() + 1;
+  let currentDate = new Date();
+  let currentYear = currentDate.getFullYear();
+  let currentMonth = currentDate.getMonth() + 1;
 
-      // Calculate total existing balance from all targets
-      let totalExistingBalance = targets.reduce(
-        (sum, target) => sum + (target.currentBalance || 0),
-        0
-      );
-      currentBalance = totalExistingBalance;
+  // Use the current global targets array to ensure we have the latest priority order
+  let remainingTargets = targets
+    .map((target) => ({
+      ...target,
+      remainingAmount: target.amount - (target.currentBalance || 0),
+    }))
+    .filter((target) => target.remainingAmount > 0);
 
-      // Use the current global targets array to ensure we have the latest priority order
-      let remainingTargets = targets
-        .map((target) => ({
-          ...target,
-          remainingAmount: target.amount - (target.currentBalance || 0),
-        }))
-        .filter((target) => target.remainingAmount > 0);
+  // Calculate cumulative savings needed for each target in priority order
+  let cumulativeSaving = 0;
+  const targetSchedule = remainingTargets.map((target) => {
+    cumulativeSaving += target.remainingAmount;
+    const monthsNeeded = Math.ceil(cumulativeSaving / monthlySaving);
+    
+    let targetYear = currentYear;
+    let targetMonth = currentMonth + monthsNeeded - 1;
 
-      // Calculate total saving needed and create achievement schedule
-      let totalSavingNeeded = 0;
-      const achievementSchedule = [];
-      remainingTargets.forEach((target) => {
-        totalSavingNeeded += target.remainingAmount;
-        const monthsNeeded = Math.ceil(totalSavingNeeded / monthlySaving);
-
-        let targetYear = currentYear;
-        let targetMonth = currentMonth + monthsNeeded - 1;
-
-        while (targetMonth > 12) {
-          targetMonth -= 12;
-          targetYear += 1;
-        }
-
-        achievementSchedule.push({
-          target: target,
-          year: targetYear,
-          month: targetMonth,
-        });
-      });
-
-      let index = 0;
-      while (remainingTargets.length > 0) {
-        let month = currentMonth + index;
-        index++;
-        let year = currentYear;
-
-        // Handle month overflow
-        while (month > 12) {
-          month -= 12;
-          year += 1;
-        }
-
-        let startingBalance = currentBalance;
-        let balanceAfterSaving = currentBalance + monthlySaving;
-        let targetAchieved = "";
-        let achievedTargets = [];
-        let totalSpentThisMonth = 0;
-
-        // Check if any targets should be achieved this month based on schedule
-        const targetsToAchieve = achievementSchedule.filter(
-          (scheduled) =>
-            scheduled.year === year &&
-            scheduled.month === month &&
-            remainingTargets.some(
-              (remaining) => remaining.id === scheduled.target.id
-            )
-        );
-
-        // Achieve targets in priority order
-        targetsToAchieve.forEach((scheduled) => {
-          const targetIndex = remainingTargets.findIndex(
-            (t) => t.id === scheduled.target.id
-          );
-          if (targetIndex !== -1) {
-            const target = remainingTargets[targetIndex];
-            achievedTargets.push(target);
-            totalSpentThisMonth += target.amount; // Use full target amount, not remaining amount
-            remainingTargets.splice(targetIndex, 1);
-          }
-        });
-
-        // Update current balance after spending
-        currentBalance = balanceAfterSaving - totalSpentThisMonth;
-
-        if (achievedTargets.length > 0) {
-          targetAchieved = achievedTargets
-            .map((t) => `${t.name} - ${formatRupiah(t.amount)}`)
-            .join("<br> ");
-        }
-
-        const row = `
-                    <tr ${achievedTargets.length > 0
-            ? 'style="background: #e8f5e8;"'
-            : ""
-          }>
-                        <td><strong>${year}</strong></td>
-                        <td><strong>${formatMonth(month)}</strong></td>
-                        <td class="amount-format">${formatRupiah(
-            startingBalance
-          )}</td>
-                        <td class="amount-format" style="color: #4CAF50; font-weight: 600;">+${formatRupiah(
-            monthlySaving
-          )}</td>
-                        <td class="amount-format">${formatRupiah(
-            balanceAfterSaving
-          )}</td>
-                        <td style="color: #4CAF50; font-weight: 600;">${targetAchieved || "-"
-          }</td>
-                        <td class="amount-format"><strong>${achievedTargets.length > 0
-            ? formatRupiah(currentBalance)
-            : "-"
-          }</strong></td>
-                    </tr>
-                `;
-        tbody.append(row);
-      }
-
-      if (remainingTargets.length > 0) {
-        tbody.append(`
-                    <tr style="background: #fff3e0;">
-                        <td colspan="7" style="text-align: center; padding: 20px; color: #ff9800; font-weight: 600;">
-                            ⚠️ Target yang belum tercapai: ${remainingTargets
-            .map((t) => t.name)
-            .join(", ")}
-                        </td>
-                    </tr>
-                `);
-      } else {
-        tbody.append(`
-                    <tr style="background: #e8f5e8;">
-                        <td colspan="7" style="text-align: center; padding: 20px; color: #4CAF50; font-weight: 600;">
-                            🎉 Semua target berhasil dicapai!
-                        </td>
-                    </tr>
-                `);
-      }
+    while (targetMonth > 12) {
+      targetMonth -= 12;
+      targetYear += 1;
     }
+
+    return {
+      target: target,
+      year: targetYear,
+      month: targetMonth,
+      cumulativeNeeded: cumulativeSaving
+    };
+  });
+
+  // Start with balance from the first target only
+  let currentBalance = remainingTargets.length > 0 ? (remainingTargets[0].currentBalance || 0) : 0;
+
+  let monthIndex = 0;
+  while (remainingTargets.length > 0) {
+    let month = currentMonth + monthIndex;
+    monthIndex++;
+    let year = currentYear;
+
+    // Handle month overflow
+    while (month > 12) {
+      month -= 12;
+      year += 1;
+    }
+
+    let startingBalance = currentBalance;
+    let balanceAfterSaving = currentBalance + monthlySaving;
+    let targetAchieved = "";
+    let achievedTargets = [];
+    let totalSpentThisMonth = 0;
+
+    // Check if any targets should be achieved this month
+    const targetsToAchieve = targetSchedule.filter(
+      (scheduled) =>
+        scheduled.year === year &&
+        scheduled.month === month &&
+        remainingTargets.some(
+          (remaining) => remaining.id === scheduled.target.id
+        )
+    );
+
+    // Achieve targets in priority order
+    targetsToAchieve.forEach((scheduled) => {
+      const targetIndex = remainingTargets.findIndex(
+        (t) => t.id === scheduled.target.id
+      );
+      if (targetIndex !== -1) {
+        const target = remainingTargets[targetIndex];
+        achievedTargets.push(target);
+        totalSpentThisMonth += target.remainingAmount;
+        remainingTargets.splice(targetIndex, 1);
+      }
+    });
+
+    // Calculate remaining balance after spending (this is the "Sisa Anggaran")
+    let sisaAnggaran = balanceAfterSaving - totalSpentThisMonth;
+    
+    // For next month's starting balance, add the next target's current balance if exists
+    if (achievedTargets.length > 0 && remainingTargets.length > 0) {
+      currentBalance = sisaAnggaran + (remainingTargets[0].currentBalance || 0);
+    } else {
+      currentBalance = sisaAnggaran;
+    }
+
+    if (achievedTargets.length > 0) {
+      targetAchieved = achievedTargets
+        .map((t) => `${t.name} - ${formatRupiah(t.amount)}`)
+        .join("<br> ");
+    }
+
+    const row = `
+      <tr ${achievedTargets.length > 0 ? 'style="background: #e8f5e8;"' : ""}>
+        <td><strong>${year}</strong></td>
+        <td><strong>${formatMonth(month)}</strong></td>
+        <td class="amount-format">${formatRupiah(startingBalance)}</td>
+        <td class="amount-format" style="color: #4CAF50; font-weight: 600;">+${formatRupiah(monthlySaving)}</td>
+        <td class="amount-format">${formatRupiah(balanceAfterSaving)}</td>
+        <td style="color: #4CAF50; font-weight: 600;">${targetAchieved || "-"}</td>
+        <td class="amount-format"><strong>${achievedTargets.length > 0 ? formatRupiah(sisaAnggaran) : "-"}</strong></td>
+      </tr>
+    `;
+    tbody.append(row);
+  }
+
+  if (remainingTargets.length > 0) {
+    tbody.append(`
+      <tr style="background: #fff3e0;">
+        <td colspan="7" style="text-align: center; padding: 20px; color: #ff9800; font-weight: 600;">
+          ⚠️ Target yang belum tercapai: ${remainingTargets.map((t) => t.name).join(", ")}
+        </td>
+      </tr>
+    `);
+  } else {
+    tbody.append(`
+      <tr style="background: #e8f5e8;">
+        <td colspan="7" style="text-align: center; padding: 20px; color: #4CAF50; font-weight: 600;">
+          🎉 Semua target berhasil dicapai!
+        </td>
+      </tr>
+    `);
+  }
+}
   </script>
 </body>
 
