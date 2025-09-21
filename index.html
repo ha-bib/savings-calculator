@@ -2,335 +2,345 @@
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Target Tabungan</title>
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'><text y='60' font-size='60'>💵</text></svg>">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/ui-lightness/jquery-ui.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Target Tabungan</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'><text y='60' font-size='60'>💵</text></svg>">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/ui-lightness/jquery-ui.min.css">
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ffffff 0%, #aeffb6 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffffff 0%, #aeffb6 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-        .header {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
+    .header {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 300;
+    }
 
-        .content {
-            padding: 40px;
-        }
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
 
-        .input-section {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    .content {
+      padding: 40px;
+    }
 
-            border: 2px solid #e1e5e9;
-        }
+    .input-section {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      border: 2px solid #e1e5e9;
+    }
 
-        .form-group {
-            margin-bottom: 25px;
-        }
+    .form-group {
+      margin-bottom: 25px;
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 1rem;
-        }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+      font-size: 1rem;
+    }
 
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: white;
-        }
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e1e5e9;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
 
-        .form-control:focus {
-            outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-        }
+    .form-control:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
 
-        .btn {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-        }
+    .btn {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-        }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
 
-        .btn-danger {
-            background: linear-gradient(45deg, #d32f2f, #b72020);
-            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
-            padding: 10px 15px;
-        }
+    .btn-danger {
+      background: linear-gradient(45deg, #d32f2f, #b72020);
+      box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+      padding: 10px 15px;
+    }
 
-        .btn-danger:hover {
-            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
-        }
+    .btn-danger:hover {
+      box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+    }
 
-        .target-item {
-            background: white;
-            border: 2px solid #e1e5e9;
-            border-radius: 25px;
-            padding: 20px;
-            margin-bottom: 15px;
-            cursor: move;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+    .target-item {
+      background: white;
+      border: 2px solid #e1e5e9;
+      border-radius: 25px;
+      padding: 20px;
+      margin-bottom: 15px;
+      cursor: move;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .target-item:hover {
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-        }
+    .target-item:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
 
+    .target-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
+    .target-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+    }
 
-        .target-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .target-amount {
+      font-size: 1.1rem;
+      color: #4CAF50;
+      font-weight: 600;
+    }
 
-        .target-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #333;
-        }
+    .drag-handle {
+      color: #999;
+      font-size: 1.2rem;
+      cursor: move;
+      padding: 5px;
+    }
 
-        .target-amount {
-            font-size: 1.1rem;
-            color: #4CAF50;
-            font-weight: 600;
-        }
+    .target-inputs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: flex-end;
+    }
 
-        .drag-handle {
-            color: #999;
-            font-size: 1.2rem;
-            cursor: move;
-            padding: 5px;
-        }
+    .results-section {
+      margin-top: 30px;
+    }
 
-        .target-inputs {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
-            gap: 15px;
-            align-items: end;
-        }
+    .results-table {
+      background: white;
+      border-radius: 15px;
+      overflow-x: auto;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
 
-        .results-section {
-            margin-top: 30px;
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
 
-        .results-table {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
+    th {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+    td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #f0f0f0;
+    }
 
-        th {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
+    tr:hover {
+      background: #f8f9fa;
+    }
 
-        td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
-        }
+    .sortable-placeholder {
+      height: 80px;
+      background: linear-gradient(45deg, #e3f2fd, #bbdefb);
+      border: 2px dashed #2196F3;
+      border-radius: 15px;
+      margin-bottom: 15px;
+    }
 
-        tr:hover {
-            background: #f8f9fa;
-        }
+    .priority-badge {
+      background: #4CAF50;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
 
-        .sortable-placeholder {
-            height: 80px;
-            background: linear-gradient(45deg, #e3f2fd, #bbdefb);
-            border: 2px dashed #2196F3;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
+    .amount-format {
+      font-family: 'Courier New', monospace;
+    }
 
-        .priority-badge {
-            background: #4CAF50;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
+    /* Mobile-friendly tweaks */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
 
-        .amount-format {
-            font-family: 'Courier New', monospace;
-        }
+      .content {
+        padding: 15px;
+      }
 
-        <blade media|%20(max-width%3A%20768px)%20%7B>.content {
-            padding: 20px;
-        }
+      .input-section {
+        padding: 15px;
+      }
 
-        .target-inputs {
-            grid-template-columns: 1fr;
-        }
+      .target-inputs {
+        flex-direction: column;
+      }
 
-        .header h1 {
-            font-size: 2rem;
-        }
-        }
-    </style>
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .header h1 {
+        font-size: 1.6rem;
+      }
+
+      table {
+        min-width: 500px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>💰 Kalkulator Target Tabungan</h1>
-            <p>Rencanakan masa depan finansial Anda dengan mudah</p>
-        </div>
-
-        <div class="content">
-            <div class="input-section">
-
-                <div class="form-group">
-                    <label for="monthly-saving">💵 Tabungan Bulanan (Rp)</label>
-                    <input type="number" id="monthly-saving" class="form-control" placeholder="Masukkan jumlah tabungan bulanan" min="0">
-                </div>
-
-                <h3 style="margin: 30px 0 20px 0; color: #333;">🎯 Tambah Target Baru</h3>
-
-                <div class="target-inputs" style="display: flex; flex-wrap: wrap; gap: 15px;">
-                    <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
-                        <label for="target-name">Nama Target</label>
-                        <input type="text" id="target-name" class="form-control" placeholder="Cth: Motor Baru">
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
-                        <label for="target-amount">Nominal Target (Rp)</label>
-                        <input type="number" id="target-amount" class="form-control" placeholder="Cth: 20.000.000" min="0">
-                    </div>
-                    <div class="form-group" style="flex: 1; min-width: 200px; margin-bottom: 0;">
-                        <label for="current-balance">💰 Nominal Tercapai (Rp)</label>
-                        <input type="number" id="current-balance" class="form-control" placeholder="Saldo saat ini: 0" min="0" value="0">
-                    </div>
-                    <div style="display: flex; align-items: flex-end;">
-                        <button class="btn" onclick="addTarget()" style="width: 100%;">✚ Tambah Target</button>
-                    </div>
-                </div>
-                <style>
-                    <blade media|%20(max-width%3A%20768px)%20%7B>.target-inputs {
-                        flex-direction: column !important;
-                    }
-
-                    .target-inputs .form-group {
-                        width: 100%;
-                    }
-                    }
-                </style>
-            </div>
-
-            <div id="targets-section" style="display: none;">
-                <h3 style="margin-bottom: 20px; color: #333;">🏆 Daftar Target (Seret untuk mengubah prioritas)</h3>
-                <div id="targets-list"></div>
-            </div>
-            <button class="btn" onclick="calculateResults()" style="margin-top: 20px; display: block; width: 100%;">➤ Hitung Timeline</button>
-
-            <div id="results-section" class="results-section" style="display: none;">
-                <h3 style="margin-bottom: 20px; color: #333;">📅 Timeline Pencapaian Target</h3>
-                <div class="results-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tahun</th>
-                                <th>Bulan</th>
-                                <th>Target Tercapai</th>
-                                <th>Nominal Target</th>
-                            </tr>
-                        </thead>
-                        <tbody id="results-body">
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3 style="margin: 40px 0 20px 0; color: #333;">📈 Timeline Pencapaian Target Per Bulan</h3>
-                <div class="results-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tahun</th>
-                                <th>Bulan</th>
-                                <th>Saldo Awal</th>
-                                <th>Tabungan Bulanan</th>
-                                <th>Saldo Akhir</th>
-                                <th>Target Tercapai</th>
-                                <th>Sisa Anggaran</th>
-                            </tr>
-                        </thead>
-                        <tbody id="monthly-timeline-body">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+  <div class="container">
+    <div class="header">
+      <h1>💰 Kalkulator Target Tabungan</h1>
+      <p>Rencanakan masa depan finansial Anda dengan mudah</p>
     </div>
+
+    <div class="content">
+      <div class="input-section">
+
+        <div class="form-group">
+          <label for="monthly-saving">💵 Tabungan Bulanan (Rp)</label>
+          <input type="number" id="monthly-saving" class="form-control"
+            placeholder="Masukkan jumlah tabungan bulanan" min="0">
+        </div>
+
+        <h3 style="margin: 20px 0; color: #333;">🎯 Tambah Target Baru</h3>
+
+        <div class="target-inputs">
+          <div class="form-group" style="flex: 1;">
+            <label for="target-name">Nama Target</label>
+            <input type="text" id="target-name" class="form-control" placeholder="Cth: Motor Baru">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="target-amount">Nominal Target (Rp)</label>
+            <input type="number" id="target-amount" class="form-control" placeholder="Cth: 20.000.000" min="0">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label for="current-balance">💰 Nominal Tercapai (Rp)</label>
+            <input type="number" id="current-balance" class="form-control" placeholder="Saldo saat ini: 0" min="0"
+              value="0">
+          </div>
+          <div style="flex: 1;">
+            <button class="btn" onclick="addTarget()" style="width: 100%;">✚ Tambah Target</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="targets-section" style="display: none;">
+        <h3 style="margin-bottom: 20px; color: #333;">🏆 Daftar Target (Seret untuk mengubah prioritas)</h3>
+        <div id="targets-list"></div>
+      </div>
+      <button class="btn" onclick="calculateResults()" style="margin-top: 20px; display: block; width: 100%;">➤
+        Hitung Timeline</button>
+
+      <div id="results-section" class="results-section" style="display: none;">
+        <h3 style="margin-bottom: 20px; color: #333;">📅 Timeline Pencapaian Target</h3>
+        <div class="results-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Tahun</th>
+                <th>Bulan</th>
+                <th>Target Tercapai</th>
+                <th>Nominal Target</th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+
+        <h3 style="margin: 30px 0 20px 0; color: #333;">📈 Timeline Pencapaian Target Per Bulan</h3>
+        <div class="results-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Tahun</th>
+                <th>Bulan</th>
+                <th>Saldo Awal</th>
+                <th>Tabungan Bulanan</th>
+                <th>Saldo Akhir</th>
+                <th>Target Tercapai</th>
+                <th>Sisa Anggaran</th>
+              </tr>
+            </thead>
+            <tbody id="monthly-timeline-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
     <script>
         let targets = [];
