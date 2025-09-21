@@ -2,14 +2,14 @@
 <html lang="id">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kalkulator Target Tabungan</title>
   <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'><text y='60' font-size='60'>💵</text></svg>">
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'><text y='60' font-size='60'>💵</text></svg>" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/ui-lightness/jquery-ui.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/ui-lightness/jquery-ui.min.css" />
 
   <style>
     * {
@@ -19,7 +19,7 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #ffffff 0%, #aeffb6 100%);
       min-height: 100vh;
       padding: 20px;
@@ -27,18 +27,17 @@
 
     .container {
       max-width: 1200px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      margin: 0 auto; 
       overflow: hidden;
     }
 
     .header {
-      background: linear-gradient(45deg, #4CAF50, #45a049);
+      background: linear-gradient(45deg, #4caf50, #45a049);
       color: white;
       padding: 30px;
       text-align: center;
+      margin-bottom: 25px;
+      border-radius: 20px; 
     }
 
     .header h1 {
@@ -52,17 +51,18 @@
       opacity: 0.9;
     }
 
-    .content {
-      padding: 40px;
-    }
+    
+      .content {
+        grid: 10px;
+      }
 
-    .input-section {
+    .section-wrap {
       background: #f8f9fa;
       padding: 30px;
-      border-radius: 15px;
+      border-radius: 20px;
       margin-bottom: 30px;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-      border: 2px solid #e1e5e9;
+      border: 3px solid #c3e5c4;
     }
 
     .form-group {
@@ -89,12 +89,12 @@
 
     .form-control:focus {
       outline: none;
-      border-color: #4CAF50;
+      border-color: #4caf50;
       box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
     }
 
     .btn {
-      background: linear-gradient(45deg, #4CAF50, #45a049);
+      background: linear-gradient(45deg, #4caf50, #45a049);
       color: white;
       border: none;
       padding: 12px 25px;
@@ -152,7 +152,7 @@
 
     .target-amount {
       font-size: 1.1rem;
-      color: #4CAF50;
+      color: #4caf50;
       font-weight: 600;
     }
 
@@ -188,7 +188,7 @@
     }
 
     th {
-      background: linear-gradient(45deg, #4CAF50, #45a049);
+      background: linear-gradient(45deg, #4caf50, #45a049);
       color: white;
       padding: 15px;
       text-align: left;
@@ -205,15 +205,15 @@
     }
 
     .sortable-placeholder {
-      height: 80px;
+      height: 130px;
       background: linear-gradient(45deg, #e3f2fd, #bbdefb);
-      border: 2px dashed #2196F3;
+      border: 2px dashed #2196f3;
       border-radius: 15px;
       margin-bottom: 15px;
     }
 
     .priority-badge {
-      background: #4CAF50;
+      background: #4caf50;
       color: white;
       padding: 4px 8px;
       border-radius: 15px;
@@ -222,24 +222,23 @@
     }
 
     .amount-format {
-      font-family: 'Courier New', monospace;
+      font-family: "Courier New", monospace;
     }
-    
-    
-/* Daftar target jadi kartu vertikal */
-.target-item {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-}
 
-.target-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
+    /* Daftar target jadi kartu vertikal */
+    .target-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .target-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
 
     /* Mobile-friendly tweaks */
     @media (max-width: 768px) {
@@ -247,11 +246,12 @@
         padding: 10px;
       }
 
+  
       .content {
-        padding: 15px;
+        grid: 10px;
       }
 
-      .input-section {
+      .section-wrap {
         padding: 15px;
       }
 
@@ -270,23 +270,20 @@
       table {
         min-width: 500px;
       }
-      
-  
-  .target-inputs {
-    flex-direction: column;
-    gap: 10px;
-  }
 
-  .target-inputs .form-group,
-  .target-inputs button {
-    width: 100% !important;
-  }
+      .target-inputs {
+        flex-direction: column;
+        gap: 10px;
+      }
 
-  .btn {
-    width: 100%;
-  }
+      .target-inputs .form-group,
+      .target-inputs button {
+        width: 100% !important;
+      }
 
-
+      .btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -299,45 +296,49 @@
     </div>
 
     <div class="content">
-      <div class="input-section">
-
+      <div class="section-wrap">
         <div class="form-group">
-          <label for="monthly-saving">💵 Tabungan Bulanan (Rp)</label>
-          <input type="number" id="monthly-saving" class="form-control"
-            placeholder="Masukkan jumlah tabungan bulanan" min="0">
+          <label for="monthly-saving">💵 Tabungan Per Bulan (Rp)</label>
+          <input type="number" id="monthly-saving" class="form-control" placeholder="Masukkan jumlah tabungan bulanan" min="0" />
         </div>
 
-        <h3 style="margin: 20px 0; color: #333;">🎯 Tambah Target Baru</h3>
+        <h3 style="margin: 20px 0; color: #333">🎯 Tambah Target Baru</h3>
 
         <div class="target-inputs">
-          <div class="form-group" style="flex: 1;">
+          <div class="form-group" style="flex: 1">
             <label for="target-name">Nama Target</label>
-            <input type="text" id="target-name" class="form-control" placeholder="Cth: Motor Baru">
+            <input type="text" id="target-name" class="form-control" placeholder="Cth: Motor Baru" />
           </div>
-          <div class="form-group" style="flex: 1;">
+          <div class="form-group" style="flex: 1">
             <label for="target-amount">Nominal Target (Rp)</label>
-            <input type="number" id="target-amount" class="form-control" placeholder="Cth: 20.000.000" min="0">
+            <input type="number" id="target-amount" class="form-control" placeholder="Cth: 20.000.000" min="0" />
           </div>
-          <div class="form-group" style="flex: 1;">
+          <div class="form-group" style="flex: 1">
             <label for="current-balance">💰 Nominal Tercapai (Rp)</label>
-            <input type="number" id="current-balance" class="form-control" placeholder="Saldo saat ini: 0" min="0"
-              value="0">
+            <input type="number" id="current-balance" class="form-control" placeholder="Saldo saat ini: 0" min="0" value="0" />
           </div>
-          <div style="flex:1;display: contents;">
-            <button class="btn" onclick="addTarget()" style="width: 100%;">✚ Tambah Target</button>
+          <div style="flex: 1; display: contents">
+            <button class="btn" onclick="addTarget()" style="width: 100%">
+              ✚ Tambah Target
+            </button>
           </div>
         </div>
       </div>
 
-      <div id="targets-section" style="display: none;">
-        <h3 style="margin-bottom: 20px; color: #333;">🏆 Daftar Target (Seret untuk mengubah prioritas)</h3>
+      <div id="targets-section" class="section-wrap" style="display: none">
+        <h3 style="margin-bottom: 20px; color: #333">
+          🏆 Daftar Target (Seret untuk mengubah prioritas)
+        </h3>
         <div id="targets-list"></div>
+      <button class="btn" onclick="calculateResults()" style="margin-top: 20px; display: block; width: 100%">
+        ➤ Hitung Timeline
+      </button>
       </div>
-      <button class="btn" onclick="calculateResults()" style="margin-top: 20px; display: block; width: 100%;">➤
-        Hitung Timeline</button>
 
-      <div id="results-section" class="results-section" style="display: none;">
-        <h3 style="margin-bottom: 20px; color: #333;">📅 Timeline Pencapaian Target</h3>
+      <div id="results-section" class="results-section" style="display: none">
+        <h3 style="margin-bottom: 20px; color: #333">
+          📅 Timeline Pencapaian Target
+        </h3>
         <div class="results-table">
           <table>
             <thead>
@@ -352,7 +353,9 @@
           </table>
         </div>
 
-        <h3 style="margin: 30px 0 20px 0; color: #333;">📈 Timeline Pencapaian Target Per Bulan</h3>
+        <h3 style="margin: 30px 0 20px 0; color: #333">
+          🔎 Timeline Pencapaian Target Per Bulan
+        </h3>
         <div class="results-table">
           <table>
             <thead>
@@ -373,416 +376,472 @@
     </div>
   </div>
 
+  <script>
+    let targets = [];
+    let targetIdCounter = 1;
 
+    $(document).ready(function () {
+      $("#targets-list").sortable({
+        handle: ".drag-handle",
+        placeholder: "sortable-placeholder",
+        update: function (event, ui) {
+          updateTargetOrder();
+        },
+      });
 
-    <script>
-        let targets = [];
-        let targetIdCounter = 1;
+      // Load data from localStorage on page load
+      loadFromStorage();
 
-        $(document).ready(function () {
-            $("#targets-list").sortable({
-                handle: ".drag-handle",
-                placeholder: "sortable-placeholder",
-                update: function (event, ui) {
-                    updateTargetOrder();
-                }
-            });
+      // Auto-save on input change
+      $("#monthly-saving").on("input", function () {
+        saveToStorage();
+      });
+    });
 
-            // Load data from localStorage on page load
-            loadFromStorage();
+    function formatRupiah(number) {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+      }).format(number);
+    }
 
-            // Auto-save on input change
-            $('#monthly-saving').on('input', function () {
-                saveToStorage();
-            });
-        });
+    function formatMonth(month) {
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Agu",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Des",
+      ];
+      return months[month - 1];
+    }
 
-        function formatRupiah(number) {
-            return new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                minimumFractionDigits: 0
-            }).format(number);
-        }
+    function saveToStorage() {
+      const data = {
+        targets: targets,
+        targetIdCounter: targetIdCounter,
+        monthlySaving: $("#monthly-saving").val(),
+      };
+      localStorage.setItem("savingsCalculatorData", JSON.stringify(data));
+    }
 
-        function formatMonth(month) {
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-            return months[month - 1];
-        }
+    function loadFromStorage() {
+      try {
+        const data = localStorage.getItem("savingsCalculatorData");
+        if (data) {
+          const parsedData = JSON.parse(data);
+          targets = parsedData.targets || [];
+          targetIdCounter = parsedData.targetIdCounter || 1;
 
-        function saveToStorage() {
-            const data = {
-                targets: targets,
-                targetIdCounter: targetIdCounter,
-                monthlySaving: $('#monthly-saving').val()
-            };
-            localStorage.setItem('savingsCalculatorData', JSON.stringify(data));
-        }
+          if (parsedData.monthlySaving) {
+            $("#monthly-saving").val(parsedData.monthlySaving);
+          }
 
-        function loadFromStorage() {
-            try {
-                const data = localStorage.getItem('savingsCalculatorData');
-                if (data) {
-                    const parsedData = JSON.parse(data);
-                    targets = parsedData.targets || [];
-                    targetIdCounter = parsedData.targetIdCounter || 1;
-
-                    if (parsedData.monthlySaving) {
-                        $('#monthly-saving').val(parsedData.monthlySaving);
-                    }
-
-                    if (targets.length > 0) {
-                        $('#targets-section').show();
-                        renderTargets();
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading from storage:', error);
-            }
-        }
-
-        function addTarget() {
-            const name = $('#target-name').val().trim();
-            const amount = parseInt($('#target-amount').val());
-            const currentBalance = parseInt($('#current-balance').val()) || 0;
-
-            if (!name || !amount || amount <= 0) {
-                alert('Mohon isi nama target dan nominal yang valid!');
-                return;
-            }
-
-            const target = {
-                id: targetIdCounter++,
-                name: name,
-                amount: amount,
-                currentBalance: currentBalance,
-                priority: targets.length + 1
-            };
-
-            targets.push(target);
+          if (targets.length > 0) {
+            $("#targets-section").show();
             renderTargets();
-            saveToStorage(); // Save to localStorage
-
-            $('#target-name').val('');
-            $('#target-amount').val('');
-            $('#current-balance').val('0');
-            $('#targets-section').show();
+          }
         }
+      } catch (error) {
+        console.error("Error loading from storage:", error);
+      }
+    }
 
-        function removeTarget(id) {
-            targets = targets.filter(target => target.id !== id);
-            renderTargets();
-            saveToStorage(); // Save to localStorage
+    function addTarget() {
+      const name = $("#target-name").val().trim();
+      const amount = parseInt($("#target-amount").val());
+      const currentBalance = parseInt($("#current-balance").val()) || 0;
 
-            if (targets.length === 0) {
-                $('#targets-section').hide();
-                $('#results-section').hide();
-            }
-        }
+      if (!name || !amount || amount <= 0) {
+        alert("Mohon isi nama target dan nominal yang valid!");
+        return;
+      }
 
-        function renderTargets() {
-            const targetsList = $('#targets-list');
-            targetsList.empty();
+      const target = {
+        id: targetIdCounter++,
+        name: name,
+        amount: amount,
+        currentBalance: currentBalance,
+        priority: targets.length + 1,
+      };
 
-            targets.forEach((target, index) => {
-                const remainingAmount = target.amount - (target.currentBalance || 0);
-                const progressPercentage = ((target.currentBalance || 0) / target.amount * 100).toFixed(1);
+      targets.push(target);
+      renderTargets();
+      saveToStorage(); // Save to localStorage
 
-                const targetElement = `
+      $("#target-name").val("");
+      $("#target-amount").val("");
+      $("#current-balance").val("0");
+      $("#targets-section").show();
+    }
+
+    function removeTarget(id) {
+      targets = targets.filter((target) => target.id !== id);
+      renderTargets();
+      saveToStorage(); // Save to localStorage
+
+      if (targets.length === 0) {
+        $("#targets-section").hide();
+        $("#results-section").hide();
+      }
+    }
+
+    function renderTargets() {
+      const targetsList = $("#targets-list");
+      targetsList.empty();
+
+      targets.forEach((target, index) => {
+        const remainingAmount = target.amount - (target.currentBalance || 0);
+        const progressPercentage = (
+          ((target.currentBalance || 0) / target.amount) *
+          100
+        ).toFixed(1);
+
+        const targetElement = `
                     <div class="target-item " data-id="${target.id}">
                         <div class="target-header drag-handle">
                             <div style="display: flex; align-items: center; gap: 15px;">
                                 <span class="priority-badge">${index + 1}</span>
                                 <div>
-                                    <div class="target-name">${target.name}</div>
+                                    <div class="target-name">${target.name
+          }</div>
                                     <div style="font-size: 0.9rem; color: #666; margin-top: 4px;">
-                                        Tercapai: ${formatRupiah(target.currentBalance || 0)} (${progressPercentage}%)
-                                        <br>Sisa: ${formatRupiah(remainingAmount)}
+                                      💰  ${formatRupiah(
+            target.currentBalance || 0
+          )} • ${progressPercentage}% 
                                     </div>
                                 </div>
                             </div>
                             <div style="display: flex; align-items: center; gap: 15px;">
-                                <div class="target-amount amount-format">${formatRupiah(target.amount)}</div>
+                                <div class="target-amount amount-format">${formatRupiah(
+            target.amount
+          )}</div>
                                 <div class="drag-handle">⋮⋮</div>
-                                <button class="btn btn-danger" onclick="removeTarget(${target.id})">✖</button>
+                                <button class="btn btn-danger" onclick="removeTarget(${target.id
+          })">✖</button>
                             </div>
                         </div>
                     </div>
                 `;
-                targetsList.append(targetElement);
-            });
+        targetsList.append(targetElement);
+      });
+    }
+
+    function updateTargetOrder() {
+      const newOrder = [];
+      $("#targets-list .target-item").each(function () {
+        const id = parseInt($(this).data("id"));
+        const target = targets.find((t) => t.id === id);
+        if (target) {
+          newOrder.push(target);
+        }
+      });
+
+      // Update the targets array with new order
+      console.log("New Order of Targets:", newOrder);
+      targets = newOrder;
+
+      // Update priority values to match new positions
+      targets.forEach((target, index) => {
+        target.id = index + 1;
+        target.priority = index + 1;
+      });
+      console.log("Updated Targets with Priorities:", targets);
+
+      renderTargets();
+      saveToStorage(); // Save to localStorage
+
+      // Auto-recalculate results if they are currently visible
+      if (
+        $("#results-section").is(":visible") &&
+        $("#monthly-saving").val()
+      ) {
+        calculateResults();
+      }
+    }
+
+    function calculateResults() {
+      const monthlySaving = parseInt($("#monthly-saving").val());
+
+      if (!monthlySaving || monthlySaving <= 0) {
+        alert("Mohon isi jumlah tabungan bulanan yang valid!");
+        return;
+      }
+
+      if (targets.length === 0) {
+        alert("Mohon tambahkan minimal satu target!");
+        return;
+      }
+
+      const results = [];
+      let cumulativeSaving = 0;
+      let currentDate = new Date();
+      let currentYear = currentDate.getFullYear();
+      let currentMonth = currentDate.getMonth() + 1;
+
+      // Calculate when each target will be achieved considering current balances
+      const targetCompletions = [];
+      let totalSavingNeeded = 0;
+
+      targets.forEach((target, index) => {
+        const remainingAmount = target.amount - (target.currentBalance || 0);
+        totalSavingNeeded += remainingAmount > 0 ? remainingAmount : 0;
+        const monthsNeeded = Math.ceil(totalSavingNeeded / monthlySaving);
+
+        let targetYear = currentYear;
+        let targetMonth = currentMonth + monthsNeeded - 1;
+
+        while (targetMonth > 12) {
+          targetMonth -= 12;
+          targetYear += 1;
         }
 
-        function updateTargetOrder() {
-            const newOrder = [];
-            $('#targets-list .target-item').each(function () {
-                const id = parseInt($(this).data('id'));
-                const target = targets.find(t => t.id === id);
-                if (target) {
-                    newOrder.push(target);
-                }
-            });
+        targetCompletions.push({
+          target: target,
+          year: targetYear,
+          month: targetMonth,
+          priority: index + 1,
+          remainingAmount: remainingAmount,
+        });
+      });
 
-            // Update the targets array with new order
-            console.log("New Order of Targets:", newOrder);
-            targets = newOrder;
+      // Generate timeline table
+      const maxYear = Math.max(...targetCompletions.map((t) => t.year));
+      const minYear = currentYear;
 
+      for (let year = minYear; year <= maxYear; year++) {
+        for (
+          let month = year === minYear ? currentMonth : 1;
+          month <= 12;
+          month++
+        ) {
+          const completedTargets = targetCompletions.filter(
+            (t) => t.year === year && t.month === month
+          );
 
-            // Update priority values to match new positions
-            targets.forEach((target, index) => {
-                target.id = index + 1;
-                target.priority = index + 1;
-            });
-            console.log("Updated Targets with Priorities:", targets);
-
-            renderTargets();
-            saveToStorage(); // Save to localStorage
-
-            // Auto-recalculate results if they are currently visible
-            if ($('#results-section').is(':visible') && $('#monthly-saving').val()) {
-                calculateResults();
-            }
+          if (completedTargets.length > 0) {
+            const row = {
+              year: year,
+              month: month,
+              targets: completedTargets,
+            };
+            results.push(row);
+          }
         }
+      }
 
-        function calculateResults() {
-            const monthlySaving = parseInt($('#monthly-saving').val());
+      renderTimeline(results);
+      renderMonthlyTimeline(monthlySaving, targets);
+      $("#results-section").show();
+    }
 
-            if (!monthlySaving || monthlySaving <= 0) {
-                alert('Mohon isi jumlah tabungan bulanan yang valid!');
-                return;
-            }
+    function renderTimeline(results) {
+      const tbody = $("#results-body");
+      tbody.empty();
 
-            if (targets.length === 0) {
-                alert('Mohon tambahkan minimal satu target!');
-                return;
-            }
+      if (results.length === 0) {
+        tbody.append(
+          '<tr><td colspan="12" style="text-align: center; padding: 30px;">Tidak ada hasil untuk ditampilkan</td></tr>'
+        );
+        return;
+      }
 
-            const results = [];
-            let cumulativeSaving = 0;
-            let currentDate = new Date();
-            let currentYear = currentDate.getFullYear();
-            let currentMonth = currentDate.getMonth() + 1;
+      // Determine the maximum number of targets achieved in any row
+      const maxTargets = Math.max(...results.map((r) => r.targets.length), 1);
 
-            // Calculate when each target will be achieved considering current balances
-            const targetCompletions = [];
-            let totalSavingNeeded = 0;
-
-            targets.forEach((target, index) => {
-                const remainingAmount = target.amount - (target.currentBalance || 0);
-                totalSavingNeeded += remainingAmount > 0 ? remainingAmount : 0;
-                const monthsNeeded = Math.ceil(totalSavingNeeded / monthlySaving);
-
-                let targetYear = currentYear;
-                let targetMonth = currentMonth + monthsNeeded - 1;
-
-                while (targetMonth > 12) {
-                    targetMonth -= 12;
-                    targetYear += 1;
-                }
-
-                targetCompletions.push({
-                    target: target,
-                    year: targetYear,
-                    month: targetMonth,
-                    priority: index + 1,
-                    remainingAmount: remainingAmount
-                });
-            });
-
-            // Generate timeline table
-            const maxYear = Math.max(...targetCompletions.map(t => t.year));
-            const minYear = currentYear;
-
-            for (let year = minYear; year <= maxYear; year++) {
-                for (let month = (year === minYear ? currentMonth : 1); month <= 12; month++) {
-                    const completedTargets = targetCompletions.filter(t =>
-                        t.year === year && t.month === month
-                    );
-
-                    if (completedTargets.length > 0) {
-                        const row = {
-                            year: year,
-                            month: month,
-                            targets: completedTargets
-                        };
-                        results.push(row);
-                    }
-                }
-            }
-
-            renderTimeline(results);
-            renderMonthlyTimeline(monthlySaving, targets);
-            $('#results-section').show();
-        }
-
-        function renderTimeline(results) {
-            const tbody = $('#results-body');
-            tbody.empty();
-
-            if (results.length === 0) {
-                tbody.append('<tr><td colspan="12" style="text-align: center; padding: 30px;">Tidak ada hasil untuk ditampilkan</td></tr>');
-                return;
-            }
-
-            // Determine the maximum number of targets achieved in any row
-            const maxTargets = Math.max(...results.map(r => r.targets.length), 1);
-
-            // Update the table header dynamically
-            let theadHtml = `
+      // Update the table header dynamically
+      let theadHtml = `
                 <tr>
                     <th>Tahun</th>
                     <th>Bulan</th>
             `;
-            for (let i = 0; i < maxTargets; i++) {
-                theadHtml += `
+      for (let i = 0; i < maxTargets; i++) {
+        theadHtml += `
                     <th>Target Tercapai</th>
                     <th>Nominal Target</th>
                 `;
-            }
-            theadHtml += '</tr>';
-            $('#results-body').closest('table').find('thead').html(theadHtml);
+      }
+      theadHtml += "</tr>";
+      $("#results-body").closest("table").find("thead").html(theadHtml);
 
-            // Render the rows
-            results.forEach(result => {
-                let row = `
+      // Render the rows
+      results.forEach((result) => {
+        let row = `
                     <tr>
                         <td><strong>${result.year}</strong></td>
                         <td><strong>${formatMonth(result.month)}</strong></td>
                 `;
 
-                // Add target columns
-                for (let i = 0; i < maxTargets; i++) {
-                    if (i < result.targets.length) {
-                        const target = result.targets[i];
-                        row +=
-                            `<td style="font-weight: 600;">${target.target.name}</td><td style="font-weight: 600;" class="amount-format">${formatRupiah(target.target.amount)}</td>`;
-                    } else {
-                        row += '<td></td><td></td>';
-                    }
-                }
-
-                row += '</tr>';
-                tbody.append(row);
-            });
+        // Add target columns
+        for (let i = 0; i < maxTargets; i++) {
+          if (i < result.targets.length) {
+            const target = result.targets[i];
+            row += `<td style="font-weight: 600;">${target.target.name
+              }</td><td style="font-weight: 600;" class="amount-format">${formatRupiah(
+                target.target.amount
+              )}</td>`;
+          } else {
+            row += "<td></td><td></td>";
+          }
         }
 
-        function renderMonthlyTimeline(monthlySaving, targetsParam) {
-            const tbody = $('#monthly-timeline-body');
-            tbody.empty();
+        row += "</tr>";
+        tbody.append(row);
+      });
+    }
 
-            let currentBalance = 0;
-            let currentDate = new Date();
-            let currentYear = currentDate.getFullYear();
-            let currentMonth = currentDate.getMonth() + 1;
+    function renderMonthlyTimeline(monthlySaving, targetsParam) {
+      const tbody = $("#monthly-timeline-body");
+      tbody.empty();
 
-            // Calculate total existing balance from all targets
-            let totalExistingBalance = targets.reduce((sum, target) => sum + (target.currentBalance || 0), 0);
-            currentBalance = totalExistingBalance;
+      let currentBalance = 0;
+      let currentDate = new Date();
+      let currentYear = currentDate.getFullYear();
+      let currentMonth = currentDate.getMonth() + 1;
 
-            // Use the current global targets array to ensure we have the latest priority order
-            let remainingTargets = targets.map(target => ({
-                ...target,
-                remainingAmount: target.amount - (target.currentBalance || 0)
-            })).filter(target => target.remainingAmount > 0);
+      // Calculate total existing balance from all targets
+      let totalExistingBalance = targets.reduce(
+        (sum, target) => sum + (target.currentBalance || 0),
+        0
+      );
+      currentBalance = totalExistingBalance;
 
-            // Calculate total saving needed and create achievement schedule
-            let totalSavingNeeded = 0;
-            const achievementSchedule = [];
-            remainingTargets.forEach((target) => {
-                totalSavingNeeded += target.remainingAmount;
-                const monthsNeeded = Math.ceil(totalSavingNeeded / monthlySaving);
+      // Use the current global targets array to ensure we have the latest priority order
+      let remainingTargets = targets
+        .map((target) => ({
+          ...target,
+          remainingAmount: target.amount - (target.currentBalance || 0),
+        }))
+        .filter((target) => target.remainingAmount > 0);
 
-                let targetYear = currentYear;
-                let targetMonth = currentMonth + monthsNeeded - 1;
+      // Calculate total saving needed and create achievement schedule
+      let totalSavingNeeded = 0;
+      const achievementSchedule = [];
+      remainingTargets.forEach((target) => {
+        totalSavingNeeded += target.remainingAmount;
+        const monthsNeeded = Math.ceil(totalSavingNeeded / monthlySaving);
 
-                while (targetMonth > 12) {
-                    targetMonth -= 12;
-                    targetYear += 1;
-                }
+        let targetYear = currentYear;
+        let targetMonth = currentMonth + monthsNeeded - 1;
 
-                achievementSchedule.push({
-                    target: target,
-                    year: targetYear,
-                    month: targetMonth
-                });
-            });
+        while (targetMonth > 12) {
+          targetMonth -= 12;
+          targetYear += 1;
+        }
 
-            let index = 0;
-            while (remainingTargets.length > 0) {
-                let month = currentMonth + index;
-                index++;
-                let year = currentYear;
+        achievementSchedule.push({
+          target: target,
+          year: targetYear,
+          month: targetMonth,
+        });
+      });
 
-                // Handle month overflow
-                while (month > 12) {
-                    month -= 12;
-                    year += 1;
-                }
+      let index = 0;
+      while (remainingTargets.length > 0) {
+        let month = currentMonth + index;
+        index++;
+        let year = currentYear;
 
-                let startingBalance = currentBalance;
-                let balanceAfterSaving = currentBalance + monthlySaving;
-                let targetAchieved = '';
-                let achievedTargets = [];
-                let totalSpentThisMonth = 0;
+        // Handle month overflow
+        while (month > 12) {
+          month -= 12;
+          year += 1;
+        }
 
-                // Check if any targets should be achieved this month based on schedule
-                const targetsToAchieve = achievementSchedule.filter(scheduled =>
-                    scheduled.year === year &&
-                    scheduled.month === month &&
-                    remainingTargets.some(remaining => remaining.id === scheduled.target.id)
-                );
+        let startingBalance = currentBalance;
+        let balanceAfterSaving = currentBalance + monthlySaving;
+        let targetAchieved = "";
+        let achievedTargets = [];
+        let totalSpentThisMonth = 0;
 
-                // Achieve targets in priority order
-                targetsToAchieve.forEach(scheduled => {
-                    const targetIndex = remainingTargets.findIndex(t => t.id === scheduled.target.id);
-                    if (targetIndex !== -1) {
-                        const target = remainingTargets[targetIndex];
-                        achievedTargets.push(target);
-                        totalSpentThisMonth += target.remainingAmount;
-                        remainingTargets.splice(targetIndex, 1);
-                    }
-                });
+        // Check if any targets should be achieved this month based on schedule
+        const targetsToAchieve = achievementSchedule.filter(
+          (scheduled) =>
+            scheduled.year === year &&
+            scheduled.month === month &&
+            remainingTargets.some(
+              (remaining) => remaining.id === scheduled.target.id
+            )
+        );
 
-                // Update current balance after spending
-                currentBalance = balanceAfterSaving - totalSpentThisMonth;
+        // Achieve targets in priority order
+        targetsToAchieve.forEach((scheduled) => {
+          const targetIndex = remainingTargets.findIndex(
+            (t) => t.id === scheduled.target.id
+          );
+          if (targetIndex !== -1) {
+            const target = remainingTargets[targetIndex];
+            achievedTargets.push(target);
+            totalSpentThisMonth += target.amount; // Use full target amount, not remaining amount
+            remainingTargets.splice(targetIndex, 1);
+          }
+        });
 
-                if (achievedTargets.length > 0) {
-                    targetAchieved = achievedTargets.map(t => `${t.name} - ${formatRupiah(t.amount)}`).join('<br> ');
-                }
+        // Update current balance after spending
+        currentBalance = balanceAfterSaving - totalSpentThisMonth;
 
-                const row = `
-                    <tr ${achievedTargets.length > 0 ? 'style="background: #e8f5e8;"' : ''}>
+        if (achievedTargets.length > 0) {
+          targetAchieved = achievedTargets
+            .map((t) => `${t.name} - ${formatRupiah(t.amount)}`)
+            .join("<br> ");
+        }
+
+        const row = `
+                    <tr ${achievedTargets.length > 0
+            ? 'style="background: #e8f5e8;"'
+            : ""
+          }>
                         <td><strong>${year}</strong></td>
                         <td><strong>${formatMonth(month)}</strong></td>
-                        <td class="amount-format">${formatRupiah(startingBalance)}</td>
-                        <td class="amount-format" style="color: #4CAF50; font-weight: 600;">+${formatRupiah(monthlySaving)}</td>
-                        <td class="amount-format">${formatRupiah(balanceAfterSaving)}</td>
-                        <td style="color: #4CAF50; font-weight: 600;">${targetAchieved || '-'}</td>
-                        <td class="amount-format"><strong>${achievedTargets.length > 0 ? formatRupiah(currentBalance) : '-'}</strong></td>
+                        <td class="amount-format">${formatRupiah(
+            startingBalance
+          )}</td>
+                        <td class="amount-format" style="color: #4CAF50; font-weight: 600;">+${formatRupiah(
+            monthlySaving
+          )}</td>
+                        <td class="amount-format">${formatRupiah(
+            balanceAfterSaving
+          )}</td>
+                        <td style="color: #4CAF50; font-weight: 600;">${targetAchieved || "-"
+          }</td>
+                        <td class="amount-format"><strong>${achievedTargets.length > 0
+            ? formatRupiah(currentBalance)
+            : "-"
+          }</strong></td>
                     </tr>
                 `;
-                tbody.append(row);
-            }
+        tbody.append(row);
+      }
 
-            if (remainingTargets.length > 0) {
-                tbody.append(`
+      if (remainingTargets.length > 0) {
+        tbody.append(`
                     <tr style="background: #fff3e0;">
                         <td colspan="7" style="text-align: center; padding: 20px; color: #ff9800; font-weight: 600;">
-                            ⚠️ Target yang belum tercapai: ${remainingTargets.map(t => t.name).join(', ')}
+                            ⚠️ Target yang belum tercapai: ${remainingTargets
+            .map((t) => t.name)
+            .join(", ")}
                         </td>
                     </tr>
                 `);
-            } else {
-                tbody.append(`
+      } else {
+        tbody.append(`
                     <tr style="background: #e8f5e8;">
                         <td colspan="7" style="text-align: center; padding: 20px; color: #4CAF50; font-weight: 600;">
                             🎉 Semua target berhasil dicapai!
                         </td>
                     </tr>
                 `);
-            }
-        }
-    </script>
+      }
+    }
+  </script>
 </body>
 
 </html>
