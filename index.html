@@ -224,6 +224,22 @@
     .amount-format {
       font-family: 'Courier New', monospace;
     }
+    
+    
+/* Daftar target jadi kartu vertikal */
+.target-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.target-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
 
     /* Mobile-friendly tweaks */
     @media (max-width: 768px) {
@@ -254,6 +270,23 @@
       table {
         min-width: 500px;
       }
+      
+  
+  .target-inputs {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .target-inputs .form-group,
+  .target-inputs button {
+    width: 100% !important;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+
     }
   </style>
 </head>
