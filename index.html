@@ -162,6 +162,125 @@
       cursor: move; 
     }
 
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background-color: #f8f9fa;
+      margin: 50px auto;
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { 
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to { 
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e1e5e9;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      color: #333;
+      font-size: 1.5rem;
+    }
+
+    .close-modal {
+      font-size: 28px;
+      font-weight: bold;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .close-modal:hover {
+      color: #333;
+    }
+
+    .modal-body {
+      margin-bottom: 20px;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(45deg, #999, #777);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-secondary:hover {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .reorder-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-reorder {
+        background: linear-gradient(45deg, #ffffff, #ffffff);
+        color: rgb(0, 0, 0);
+        border: none;
+        padding: 8px 7px;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px #0d3c1033;
+    }
+
+    .btn-reorder:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px #45a04933;
+    }
+
+    .btn-reorder:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .target-inputs {
       display: flex;
       flex-wrap: wrap;
@@ -239,6 +358,9 @@
       justify-content: space-between; 
     }
 
+    .d-none {
+      display: none !important;
+    }
    /* Mobile-friendly tweaks */
 @media (max-width: 768px) {
   body {
@@ -416,6 +538,35 @@
     </div>
   </div>
 
+  <!-- Edit Target Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>✏️ Edit Target</h2>
+        <button class="close-modal" onclick="closeEditModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="modal-target-name">Nama Target</label>
+          <input type="text" id="modal-target-name" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="modal-target-amount">Nominal Target (Rp)</label>
+          <input type="number" id="modal-target-amount" class="form-control" min="0" />
+        </div>
+        <div class="form-group">
+          <label for="modal-current-balance">💰 Nominal Tercapai (Rp)</label>
+          <input type="number" id="modal-current-balance" class="form-control" min="0" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeEditModal()">Batal</button>
+        <button class="btn btn-danger" onclick="deleteTargetFromModal()">🗑️ Hapus</button>
+        <button class="btn" onclick="saveTargetEdit()">💾 Simpan</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let targets = [];
     let targetIdCounter = 1;
@@ -534,6 +685,48 @@
       }
     }
 
+    function moveTargetUp(targetId) {
+      const currentIndex = targets.findIndex((t) => t.id === targetId);
+      if (currentIndex > 0) {
+        // Swap with previous target
+        [targets[currentIndex], targets[currentIndex - 1]] = [
+          targets[currentIndex - 1],
+          targets[currentIndex],
+        ];
+        renderTargets();
+        saveToStorage();
+        
+        // Auto-recalculate results if they are currently visible
+        if (
+          $("#results-section").is(":visible") &&
+          $("#monthly-saving").val()
+        ) {
+          calculateResults();
+        }
+      }
+    }
+
+    function moveTargetDown(targetId) {
+      const currentIndex = targets.findIndex((t) => t.id === targetId);
+      if (currentIndex < targets.length - 1) {
+        // Swap with next target
+        [targets[currentIndex], targets[currentIndex + 1]] = [
+          targets[currentIndex + 1],
+          targets[currentIndex],
+        ];
+        renderTargets();
+        saveToStorage();
+        
+        // Auto-recalculate results if they are currently visible
+        if (
+          $("#results-section").is(":visible") &&
+          $("#monthly-saving").val()
+        ) {
+          calculateResults();
+        }
+      }
+    }
+
     function renderTargets() {
       const targetsList = $("#targets-list");
       targetsList.empty();
@@ -565,8 +758,11 @@
             target.amount
           )}</div>
                                 <div class="drag-handle">⋮⋮</div>
-                                <button class="btn btn-danger" onclick="removeTarget(${target.id
-          })">✖</button>
+                                <div class="reorder-buttons">
+                                  <button class="btn-reorder ${index === 0 ? 'd-none' : ''}" onclick="moveTargetUp(${target.id})" ${index === 0 ? 'disabled' : ''}>▲</button>
+                                  <button class="btn-reorder ${index === targets.length - 1 ? 'd-none' : ''}" onclick="moveTargetDown(${target.id})" ${index === targets.length - 1 ? 'disabled' : ''}>▼</button>
+                                </div>
+                                <button class="btn" onclick="openEditModal(${target.id})" style="    background: linear-gradient(60deg, #4aa94e, #081208);color: #000;font-size: 20px;padding: 10px;box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);">⚙️</button>
                             </div>
                         </div>
                     </div>
@@ -815,7 +1011,7 @@
       if (targetIndex !== -1) {
         const target = remainingTargets[targetIndex];
         achievedTargets.push(target);
-        totalSpentThisMonth += target.remainingAmount;
+        totalSpentThisMonth += target.amount;
         remainingTargets.splice(targetIndex, 1);
       }
     });
@@ -868,6 +1064,72 @@
     `);
   }
 }
+
+    // Modal functions
+    let currentEditingTargetId = null;
+
+    function openEditModal(targetId) {
+      const target = targets.find((t) => t.id === targetId);
+      if (!target) return;
+
+      currentEditingTargetId = targetId;
+      $("#modal-target-name").val(target.name);
+      $("#modal-target-amount").val(target.amount);
+      $("#modal-current-balance").val(target.currentBalance || 0);
+
+      $("#editModal").fadeIn(300);
+    }
+
+    function closeEditModal() {
+      $("#editModal").fadeOut(300, function () {
+        currentEditingTargetId = null;
+      });
+    }
+
+    function saveTargetEdit() {
+      const name = $("#modal-target-name").val().trim();
+      const amount = parseInt($("#modal-target-amount").val());
+      const currentBalance = parseInt($("#modal-current-balance").val()) || 0;
+
+      if (!name || !amount || amount <= 0) {
+        alert("Mohon isi nama target dan nominal yang valid!");
+        return;
+      }
+
+      const targetIndex = targets.findIndex((t) => t.id === currentEditingTargetId);
+      if (targetIndex !== -1) {
+        targets[targetIndex].name = name;
+        targets[targetIndex].amount = amount;
+        targets[targetIndex].currentBalance = currentBalance;
+
+        renderTargets();
+        saveToStorage();
+        closeEditModal();
+
+        // Auto-recalculate results if they are currently visible
+        if (
+          $("#results-section").is(":visible") &&
+          $("#monthly-saving").val()
+        ) {
+          calculateResults();
+        }
+      }
+    }
+
+    function deleteTargetFromModal() {
+      if (confirm("Apakah Anda yakin ingin menghapus target ini?")) {
+        removeTarget(currentEditingTargetId);
+        closeEditModal();
+      }
+    }
+
+    // Close modal when clicking outside of it
+    $(window).click(function (event) {
+      const modal = $("#editModal")[0];
+      if (event.target === modal) {
+        closeEditModal();
+      }
+    });
   </script>
 </body>
 
