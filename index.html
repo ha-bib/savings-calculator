@@ -68,6 +68,9 @@
     .form-group {
       margin-bottom: 25px;
     }
+    .mb-1 {
+      margin-bottom: 5px !important;
+    }
 
     .form-group label {
       display: block;
@@ -253,7 +256,8 @@
 
     .reorder-buttons {
       display: flex;
-      gap: 8px;
+      flex-direction: column;
+      gap: 4px;
       align-items: center;
     }
 
@@ -261,13 +265,14 @@
         background: linear-gradient(45deg, #ffffff, #ffffff);
         color: rgb(0, 0, 0);
         border: none;
-        padding: 8px 7px;
-        border-radius: 15px;
+        padding: 4px 10px;
+        border-radius: 8px;
         cursor: pointer;
-        font-size: 0.9rem;
+        font-size: 1.2rem;
+        line-height: 1;
         font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px #0d3c1033;
+        transition: all 0.3s ease; 
+        min-width: 40px;
     }
 
     .btn-reorder:hover {
@@ -459,35 +464,26 @@
 
     <div class="content">
       <div class="section-wrap">
-        <div class="form-group">
-          <label for="monthly-saving">💵 Tabungan Per Bulan (Rp)</label>
-          <input type="number" id="monthly-saving" class="form-control" placeholder="Masukkan jumlah tabungan bulanan" min="0" />
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+          <div class="form-group mb-1" style="flex: 2; min-width: 250px;">
+            <label for="monthly-saving">💵 Tabungan Per Bulan (Rp)</label>
+            <input type="number" id="monthly-saving" class="form-control" placeholder="Masukkan jumlah tabungan bulanan" min="0" />
+          </div>
+          <div class="form-group mb-1" style="flex: 1; min-width: 200px;">
+            <label for="start-month">📅 Mulai Menabung</label>
+            <select id="start-month" class="form-control" style="cursor: pointer;">
+              <option value="current">Bulan Ini</option>
+              <option value="next">Bulan Depan</option>
+            </select>
+          </div>
+          <button class="btn" onclick="openAddModal()" style="width: 100%">
+          ✚ Tambah Target Baru
+        </button>
         </div>
+      </div>  
 
-        <h3 style="margin: 20px 0; color: #333">🎯 Tambah Target Baru</h3>
+      <div id="targets-section" class="section-wrap" style="display: none"> 
 
-        <div class="target-inputs">
-          <div class="form-group" style="flex: 1">
-            <label for="target-name">Nama Target</label>
-            <input type="text" id="target-name" class="form-control" placeholder="Cth: Motor Baru" />
-          </div>
-          <div class="form-group" style="flex: 1">
-            <label for="target-amount">Nominal Target (Rp)</label>
-            <input type="number" id="target-amount" class="form-control" placeholder="Cth: 20.000.000" min="0" />
-          </div>
-          <div class="form-group" style="flex: 1">
-            <label for="current-balance">💰 Nominal Tercapai (Rp)</label>
-            <input type="number" id="current-balance" class="form-control" placeholder="Saldo saat ini: 0" min="0" value="0" />
-          </div>
-          <div style="flex: 1; display: contents">
-            <button class="btn" onclick="addTarget()" style="width: 100%">
-              ✚ Tambah Target
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div id="targets-section" class="section-wrap" style="display: none">
         <h3 style="margin-bottom: 20px; color: #333">
           🏆 Daftar Target (Seret untuk mengubah prioritas)
         </h3>
@@ -512,6 +508,26 @@
               </tr>
             </thead>
             <tbody id="results-body"></tbody>
+            <tfoot id="results-footer">
+              <tr style="background: #e8f5e8; font-weight: bold;">
+                <td colspan="12" style="padding: 12px; border-top: 3px solid #4caf50;">
+                  <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px; text-align: center;">
+                    <div>
+                      <div style="color: #666; font-size: 0.9rem; font-weight: normal;">⏱️ Durasi</div>
+                      <div style="color: #4caf50; font-size: 1.2rem;" id="summary-duration">-</div>
+                    </div>
+                    <div>
+                      <div style="color: #666; font-size: 0.9rem; font-weight: normal;">🎯 Total Target</div>
+                      <div style="color: #4caf50; font-size: 1.2rem;" id="summary-targets">-</div>
+                    </div>
+                    <div>
+                      <div style="color: #666; font-size: 0.9rem; font-weight: normal;">💰 Total Nilai</div>
+                      <div style="color: #4caf50; font-size: 1.2rem;" class="amount-format" id="summary-total">-</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
 
@@ -567,6 +583,34 @@
     </div>
   </div>
 
+  <!-- Add Target Modal -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>✚ Tambah Target Baru</h2>
+        <button class="close-modal" onclick="closeAddModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="add-target-name">Nama Target</label>
+          <input type="text" id="add-target-name" class="form-control" placeholder="Cth: Motor Baru" />
+        </div>
+        <div class="form-group">
+          <label for="add-target-amount">Nominal Target (Rp)</label>
+          <input type="number" id="add-target-amount" class="form-control" placeholder="Cth: 20.000.000" min="0" />
+        </div>
+        <div class="form-group">
+          <label for="add-current-balance">💰 Nominal Tercapai (Rp)</label>
+          <input type="number" id="add-current-balance" class="form-control" placeholder="Saldo saat ini: 0" min="0" value="0" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeAddModal()">Batal</button>
+        <button class="btn" onclick="saveNewTarget()">✚ Tambah Target</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let targets = [];
     let targetIdCounter = 1;
@@ -585,6 +629,11 @@
 
       // Auto-save on input change
       $("#monthly-saving").on("input", function () {
+        saveToStorage();
+      });
+
+      // Auto-save on start month change
+      $("#start-month").on("change", function () {
         saveToStorage();
       });
     });
@@ -620,6 +669,7 @@
         targets: targets,
         targetIdCounter: targetIdCounter,
         monthlySaving: $("#monthly-saving").val(),
+        startMonth: $("#start-month").val(),
       };
       localStorage.setItem("savingsCalculatorData", JSON.stringify(data));
     }
@@ -636,6 +686,10 @@
             $("#monthly-saving").val(parsedData.monthlySaving);
           }
 
+          if (parsedData.startMonth) {
+            $("#start-month").val(parsedData.startMonth);
+          }
+
           if (targets.length > 0) {
             $("#targets-section").show();
             renderTargets();
@@ -647,9 +701,9 @@
     }
 
     function addTarget() {
-      const name = $("#target-name").val().trim();
-      const amount = parseInt($("#target-amount").val());
-      const currentBalance = parseInt($("#current-balance").val()) || 0;
+      const name = $("#add-target-name").val().trim();
+      const amount = parseInt($("#add-target-amount").val());
+      const currentBalance = parseInt($("#add-current-balance").val()) || 0;
 
       if (!name || !amount || amount <= 0) {
         alert("Mohon isi nama target dan nominal yang valid!");
@@ -668,9 +722,9 @@
       renderTargets();
       saveToStorage(); // Save to localStorage
 
-      $("#target-name").val("");
-      $("#target-amount").val("");
-      $("#current-balance").val("0");
+      $("#add-target-name").val("");
+      $("#add-target-amount").val("");
+      $("#add-current-balance").val("0");
       $("#targets-section").show();
     }
 
@@ -823,13 +877,25 @@
       let currentYear = currentDate.getFullYear();
       let currentMonth = currentDate.getMonth() + 1;
 
+      // Check if user selected to start next month
+      const startMonthSelection = $("#start-month").val();
+      if (startMonthSelection === "next") {
+        currentMonth += 1;
+        if (currentMonth > 12) {
+          currentMonth = 1;
+          currentYear += 1;
+        }
+      }
+
       // Calculate when each target will be achieved considering current balances
       const targetCompletions = [];
       let totalSavingNeeded = 0;
 
       targets.forEach((target, index) => {
         const remainingAmount = target.amount - (target.currentBalance || 0);
-        totalSavingNeeded += remainingAmount > 0 ? remainingAmount : 0;
+        if (remainingAmount > 0) {
+          totalSavingNeeded += remainingAmount;
+        }
         const monthsNeeded = Math.ceil(totalSavingNeeded / monthlySaving);
 
         let targetYear = currentYear;
@@ -849,7 +915,7 @@
         });
       });
 
-      // Generate timeline table
+      // Generate timeline table - group targets by month
       const maxYear = Math.max(...targetCompletions.map((t) => t.year));
       const minYear = currentYear;
 
@@ -874,64 +940,80 @@
         }
       }
 
-      renderTimeline(results);
+      renderTimeline(results, targetCompletions);
       renderMonthlyTimeline(monthlySaving, targets);
       $("#results-section").show();
     }
 
-    function renderTimeline(results) {
+    function renderTimeline(results, allTargets) {
       const tbody = $("#results-body");
       tbody.empty();
 
       if (results.length === 0) {
         tbody.append(
-          '<tr><td colspan="12" style="text-align: center; padding: 30px;">Tidak ada hasil untuk ditampilkan</td></tr>'
+          '<tr><td colspan="4" style="text-align: center; padding: 30px;">Tidak ada hasil untuk ditampilkan</td></tr>'
         );
         return;
       }
 
-      // Determine the maximum number of targets achieved in any row
-      const maxTargets = Math.max(...results.map((r) => r.targets.length), 1);
-
-      // Update the table header dynamically
+      // Set fixed table header (no dynamic columns)
       let theadHtml = `
                 <tr>
                     <th>Tahun</th>
                     <th>Bulan</th>
-            `;
-      for (let i = 0; i < maxTargets; i++) {
-        theadHtml += `
                     <th>Target Tercapai</th>
                     <th>Nominal Target</th>
-                `;
-      }
-      theadHtml += "</tr>";
+                </tr>
+            `;
       $("#results-body").closest("table").find("thead").html(theadHtml);
 
-      // Render the rows
-      results.forEach((result) => {
-        let row = `
+      // Render each target as a separate row
+      allTargets.forEach((targetCompletion) => {
+        const row = `
                     <tr>
-                        <td><strong>${result.year}</strong></td>
-                        <td><strong>${formatMonth(result.month)}</strong></td>
+                        <td><strong>${targetCompletion.year}</strong></td>
+                        <td><strong>${formatMonth(targetCompletion.month)}</strong></td>
+                        <td style="font-weight: 600;">${targetCompletion.target.name}</td>
+                        <td style="font-weight: 600;" class="amount-format">${formatRupiah(targetCompletion.target.amount)}</td>
+                    </tr>
                 `;
-
-        // Add target columns
-        for (let i = 0; i < maxTargets; i++) {
-          if (i < result.targets.length) {
-            const target = result.targets[i];
-            row += `<td style="font-weight: 600;">${target.target.name
-              }</td><td style="font-weight: 600;" class="amount-format">${formatRupiah(
-                target.target.amount
-              )}</td>`;
-          } else {
-            row += "<td></td><td></td>";
-          }
-        }
-
-        row += "</tr>";
         tbody.append(row);
       });
+
+      // Calculate summary statistics
+      let totalTargets = allTargets.length;
+      let totalValue = 0;
+      allTargets.forEach((t) => {
+        totalValue += t.target.amount;
+      });
+
+      // Calculate duration
+      if (allTargets.length > 0) {
+        const firstTarget = allTargets[0];
+        const lastTarget = allTargets[allTargets.length - 1];
+        const startYear = firstTarget.year;
+        const startMonth = firstTarget.month;
+        const endYear = lastTarget.year;
+        const endMonth = lastTarget.month;
+
+        const totalMonths = (endYear - startYear) * 12 + (endMonth - startMonth) + 1;
+        const years = Math.floor(totalMonths / 12);
+        const months = totalMonths % 12;
+
+        let durationText = "";
+        if (years > 0 && months > 0) {
+          durationText = `${years} Tahun ${months} Bulan`;
+        } else if (years > 0) {
+          durationText = `${years} Tahun`;
+        } else {
+          durationText = `${months} Bulan`;
+        }
+
+        // Update summary in footer
+        $("#summary-duration").text(durationText);
+        $("#summary-targets").text(`${totalTargets} Target`);
+        $("#summary-total").text(formatRupiah(totalValue));
+      }
     }
 
     function renderMonthlyTimeline(monthlySaving, targetsParam) {
@@ -941,6 +1023,16 @@
   let currentDate = new Date();
   let currentYear = currentDate.getFullYear();
   let currentMonth = currentDate.getMonth() + 1;
+
+  // Check if user selected to start next month
+  const startMonthSelection = $("#start-month").val();
+  if (startMonthSelection === "next") {
+    currentMonth += 1;
+    if (currentMonth > 12) {
+      currentMonth = 1;
+      currentYear += 1;
+    }
+  }
 
   // Use the current global targets array to ensure we have the latest priority order
   let remainingTargets = targets
@@ -1068,6 +1160,22 @@
     // Modal functions
     let currentEditingTargetId = null;
 
+    function openAddModal() {
+      $("#add-target-name").val("");
+      $("#add-target-amount").val("");
+      $("#add-current-balance").val("0");
+      $("#addModal").fadeIn(300);
+    }
+
+    function closeAddModal() {
+      $("#addModal").fadeOut(300);
+    }
+
+    function saveNewTarget() {
+      addTarget();
+      closeAddModal();
+    }
+
     function openEditModal(targetId) {
       const target = targets.find((t) => t.id === targetId);
       if (!target) return;
@@ -1125,9 +1233,15 @@
 
     // Close modal when clicking outside of it
     $(window).click(function (event) {
-      const modal = $("#editModal")[0];
-      if (event.target === modal) {
+      const editModal = $("#editModal")[0];
+      const addModal = $("#addModal")[0];
+      
+      if (event.target === editModal) {
         closeEditModal();
+      }
+      
+      if (event.target === addModal) {
+        closeAddModal();
       }
     });
   </script>
