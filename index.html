@@ -264,6 +264,48 @@
       justify-content: flex-end;
     }
 
+    .data-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .data-card {
+      background: white;
+      border: 2px solid #e1e5e9;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .data-card h3 {
+      color: #333;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .data-card p {
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin-bottom: 14px;
+    }
+
+    .data-file-input {
+      width: 100%;
+      padding: 10px;
+      background: white;
+      border: 2px dashed #c3e5c4;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .import-status {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 12px;
+      min-height: 20px;
+    }
+
     .btn-secondary {
       background: linear-gradient(45deg, #999, #777);
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -436,6 +478,10 @@
     width: 100%;
   }
 
+  .data-actions {
+    grid-template-columns: 1fr;
+  }
+
   /* Keep tutorial button compact on mobile */
   .btn-tutorial {
     width: auto !important;
@@ -512,6 +558,9 @@
         <div style="display: flex; gap: 10px; margin-top: 15px;">
           <button class="btn btn-tutorial" onclick="openTutorialModal()" style="flex: 0 0 auto; padding: 12px 20px;">
             📖 Tutorial
+          </button>
+          <button class="btn btn-secondary" onclick="openDataModal()" style="flex: 0 0 auto; padding: 12px 20px;">
+            Data
           </button>
           <button class="btn" onclick="openAddModal()" style="flex: 1;">
             ✚ Tambah Target
@@ -648,6 +697,34 @@
     </div>
   </div>
 
+  <!-- Data Modal -->
+  <div id="dataModal" class="modal">
+    <div class="modal-content" style="max-width: 720px;">
+      <div class="modal-header">
+        <h2>Data Tabungan</h2>
+        <button class="close-modal" onclick="closeDataModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="data-actions">
+          <div class="data-card">
+            <h3>Export Data</h3>
+            <p>Unduh semua target dan pengaturan tabungan ke file JSON.</p>
+            <button class="btn" onclick="exportData()">Export JSON</button>
+          </div>
+          <div class="data-card">
+            <h3>Import Data</h3>
+            <p>Pilih file JSON dari device lain. Data saat ini akan diganti.</p>
+            <input type="file" id="import-data-file" class="data-file-input" accept="application/json,.json" />
+            <div id="import-status" class="import-status"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeDataModal()">Tutup</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Tutorial Modal -->
   <div id="tutorialModal" class="modal">
     <div class="modal-content" style="max-width: 700px;">
@@ -742,10 +819,12 @@
     function attachEventListeners() {
       $("#monthly-saving").on("input", saveToStorage);
       $("#start-month").on("change", saveToStorage);
+      $("#import-data-file").on("change", importData);
       
       $(window).click(function (event) {
         if (event.target === $("#editModal")[0]) closeEditModal();
         if (event.target === $("#addModal")[0]) closeAddModal();
+        if (event.target === $("#dataModal")[0]) closeDataModal();
         if (event.target === $("#tutorialModal")[0]) closeTutorialModal();
       });
     }
@@ -855,6 +934,123 @@
       } catch (error) {
         console.error("Error loading from storage:", error);
       }
+    }
+
+    // ============================================
+    // DATA EXPORT / IMPORT
+    // ============================================
+    function buildDataSnapshot() {
+      return {
+        app: "Tabunganku",
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        targets,
+        targetIdCounter,
+        monthlySaving: $("#monthly-saving").val(),
+        startMonth: $("#start-month").val(),
+      };
+    }
+
+    function getExportFileName() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      return `${year}${month}${day} - Tabunganku.json`;
+    }
+
+    function exportData() {
+      const data = JSON.stringify(buildDataSnapshot(), null, 2);
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = getExportFileName();
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        try {
+          const importedData = normalizeImportedData(JSON.parse(reader.result));
+
+          if (!confirm("Import data akan mengganti semua data saat ini. Lanjutkan?")) {
+            resetImportInput();
+            return;
+          }
+
+          applyImportedData(importedData);
+          $("#import-status").text(`Berhasil import: ${file.name}`);
+          resetImportInput();
+        } catch (error) {
+          $("#import-status").text("File JSON tidak valid untuk data Tabunganku.");
+          resetImportInput();
+          console.error("Error importing data:", error);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function normalizeImportedData(data) {
+      if (!data || !Array.isArray(data.targets)) {
+        throw new Error("Invalid data format");
+      }
+
+      const normalizedTargets = data.targets.map((target, index) => {
+        const id = parseInt(target.id) || index + 1;
+        const name = String(target.name || "").trim();
+        const amount = parseInt(target.amount);
+
+        if (!name || !amount || amount <= 0) {
+          throw new Error("Invalid target data");
+        }
+
+        return {
+          id,
+          name,
+          amount,
+          currentBalance: parseInt(target.currentBalance) || 0,
+          priority: index + 1,
+        };
+      });
+
+      const maxTargetId = normalizedTargets.reduce((max, target) => Math.max(max, target.id), 0);
+      const importedCounter = parseInt(data.targetIdCounter) || 1;
+
+      return {
+        targets: normalizedTargets,
+        targetIdCounter: Math.max(importedCounter, maxTargetId + 1),
+        monthlySaving: data.monthlySaving || "",
+        startMonth: data.startMonth === "next" ? "next" : "current",
+      };
+    }
+
+    function applyImportedData(data) {
+      targets = data.targets;
+      targetIdCounter = data.targetIdCounter;
+      $("#monthly-saving").val(data.monthlySaving);
+      $("#start-month").val(data.startMonth);
+
+      if (targets.length > 0) {
+        $("#targets-section").show();
+      } else {
+        $("#targets-section").hide();
+      }
+
+      $("#results-section").hide();
+      updateUIAfterTargetChange();
+    }
+
+    function resetImportInput() {
+      $("#import-data-file").val("");
     }
 
     // ============================================
@@ -1338,6 +1534,17 @@
         removeTarget(currentEditingTargetId);
         closeEditModal();
       }
+    }
+
+    // Data Modal
+    function openDataModal() {
+      $("#import-status").text("");
+      resetImportInput();
+      showModal("#dataModal");
+    }
+
+    function closeDataModal() {
+      hideModal("#dataModal");
     }
 
     // Tutorial Modal
